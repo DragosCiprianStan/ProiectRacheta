@@ -90,16 +90,18 @@
   <ItemGroup>
     <ClCompile Include="Chapter 2.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="Planets.cpp" />
+    <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="E:\Facultate\DirectX\Lab03\Surse_texturare\banana.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="tiger.x" />
+    <Image Include="..\Lab03\Surse_texturare\banana.bmp" />
+    <Image Include="Object\RocketMesh\RocketTexture.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />
+    <ClInclude Include="Planets.h" />
+    <ClInclude Include="Rocket.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

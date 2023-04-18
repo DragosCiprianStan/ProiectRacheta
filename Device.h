@@ -4,6 +4,7 @@
 #include <d3dx9.h>
 #include <d3dx9tex.h>
 #include <dinput.h>
+#pragma once
 class Device
 {
 public:

@@ -6,15 +6,21 @@
 //#include <dinput.h>
 #include "Window.h"
 #include "Device.h"
+#include "Rocket.h"
+#include "Planets.h"
 Device myDevice;
+Rocket myRocket;
+Planets earth;
 HRESULT InitD3D(HWND hWnd)
 {
 	myDevice.createD3DObject(hWnd);
 	myDevice.createDevice(hWnd);
+	myRocket.setDevice(myDevice);
+	earth.setDevice(myDevice);
 	return S_OK;
 
 }
-
+VOID Cleanup();
 
 //HRESULT InitDInput(HINSTANCE hInstance, HWND hWnd)
 //{
@@ -23,14 +29,21 @@ HRESULT InitD3D(HWND hWnd)
 
 HRESULT InitGeometry()
 {
+	myRocket.loadMesh();
+	earth.loadMesh();
 	return S_OK;
 }
 
 VOID Cleanup()
 {
 
+	myRocket.cleanUpTexture();
+	earth.cleanUpTexture();
+	if (myDevice.direct3Device9 != NULL)
+		myDevice.direct3Device9->Release();
 
-	
+	if (myDevice.directD3D != NULL)
+		myDevice.directD3D->Release();
 }
 
 void SetupWorldMatrix()
@@ -63,15 +76,12 @@ void SetupViewMatrix()
 	D3DXMatrixLookAtLH(&matView, &vEyePt, &vLookatPt, &vUpVec);
 	myDevice.direct3Device9->SetTransform(D3DTS_VIEW, &matView);
 }
-
 void SetupProjectionMatrix()
 {
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
 	myDevice.direct3Device9->SetTransform(D3DTS_PROJECTION, &matProj);
 }
-
-
 VOID SetupMatrices()
 {
 	SetupWorldMatrix();
@@ -80,25 +90,22 @@ VOID SetupMatrices()
 
 	SetupProjectionMatrix();
 }
-
-
 VOID SetupLights()
 {
 	
 }
-
 VOID Render()
 {
-	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET,
-		D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
+	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
+		myRocket.createRocket();
+		earth.createRocket();
 		SetupMatrices();
 		myDevice.direct3Device9->EndScene();
 	}
 	myDevice.direct3Device9->Present(NULL, NULL, NULL, NULL);
 }
-
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -111,7 +118,6 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
-
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 {
 	Window myWindow;
@@ -137,6 +143,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 				}
 				else {
 					Render();
+				
 				}
 			}
 		}
