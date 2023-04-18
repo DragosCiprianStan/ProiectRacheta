@@ -20,7 +20,7 @@ public:
 	HRESULT setTexture();
 	HRESULT setMesh();
 	VOID loadMesh();
-	VOID createRocket();
+	VOID createPlanet();
 	VOID cleanUpTexture();
 };
 

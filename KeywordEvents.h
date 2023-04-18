@@ -20,6 +20,6 @@ public:
 	VOID unAcquire();
 	VOID detectInput();
 	HRESULT createInputDevice(HINSTANCE hInstance, HWND hWnd);
-	bool exit();
+	bool keyword(int key);
 };
 

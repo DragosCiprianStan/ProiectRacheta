@@ -9,6 +9,7 @@
 #include "Rocket.h"
 #include "Planets.h"
 #include "KeywordEvents.h"
+#include "Pozition.h"
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
 #pragma comment (lib, "dinput8.lib")
@@ -17,6 +18,10 @@ Device myDevice;
 Rocket myRocket;
 Planets earth;
 UserEvents userEvents;
+
+
+Pozition poz;
+Pozition rot = { 1,1,1 };
 HRESULT InitD3D(HWND hWnd)
 {
 	myDevice.createD3DObject(hWnd);
@@ -113,21 +118,9 @@ VOID Render()
 	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
-		D3DXMATRIX g_Transform;
-		D3DXMatrixIdentity(&g_Transform);
-		D3DXMatrixTranslation(&g_Transform,0, 0, 0);
 
-		D3DXMATRIX g_TransformrrOTATIO;
-		D3DXMatrixIdentity(&g_TransformrrOTATIO);
-		UINT iTime = timeGetTime() % 100000;
-		FLOAT fAngle = iTime * (2.0f * D3DX_PI) / 1000.0f;
-		D3DXMatrixRotationZ(&g_TransformrrOTATIO, fAngle);
-
-		g_Transform = g_TransformrrOTATIO * g_Transform;
-
-		myDevice.direct3Device9->SetTransform(D3DTS_WORLD, &g_Transform);
-		myRocket.createRocket();
-		earth.createRocket();
+		myRocket.createRocket(poz, rot);
+		earth.createPlanet();
 		SetupMatrices();
 		myDevice.direct3Device9->EndScene();
 	}
@@ -170,10 +163,17 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 				else {
 					DetectInput();
 					Render();
-					if (userEvents.exit()) {
+					if (userEvents.keyword(DIK_ESCAPE)) {
 						PostMessage(myWindow.hWnd, WM_DESTROY, 0, 0);
 					}
-				
+					if (userEvents.keyword(DIK_W)) {
+						poz.rocketPozition.x += 0;
+						poz.rocketPozition.y += 0.5;
+					}
+					if (userEvents.keyword(DIK_S)) {
+						poz.rocketPozition.x += 0;
+						poz.rocketPozition.y -= 0.5;
+					}
 				}
 			}
 		}

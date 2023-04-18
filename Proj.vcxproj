@@ -92,6 +92,7 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="KeywordEvents.cpp" />
     <ClCompile Include="Planets.cpp" />
+    <ClCompile Include="Pozition.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -103,6 +104,7 @@
     <ClInclude Include="Device.h" />
     <ClInclude Include="KeywordEvents.h" />
     <ClInclude Include="Planets.h" />
+    <ClInclude Include="Pozition.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

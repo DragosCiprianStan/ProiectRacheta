@@ -67,14 +67,31 @@ VOID Rocket::loadMesh() {
 		}
 	}
 }
-VOID Rocket::createRocket() {
+VOID Rocket::createRocket(Pozition translation, Pozition rotation) {
 
+	this->setTranslation(translation);
+	this->setRotation(rotation);
+	//this->transform *= this->scale;
+	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);
 	for (DWORD i = 0; i < this->NumMaterials; i++)
 	{
 		this->device.direct3Device9->SetMaterial(&this->MeshMaterials[i]);
 		this->device.direct3Device9->SetTexture(0, this->texture);
 		this->Mesh->DrawSubset(i);
 	}
+}
+VOID Rocket::setTranslation(Pozition translation) {
+
+	D3DXMatrixIdentity(&this->transform);
+	D3DXMatrixTranslation(&this->transform, translation.rocketPozition.x, translation.rocketPozition.y, translation.rocketPozition.z);
+}
+VOID Rocket::setRotation(Pozition rotation) {
+	D3DXMatrixIdentity(&this->rotation);
+	D3DXMatrixTranslation(&this->rotation, rotation.rocketPozition.x, rotation.rocketPozition.y, rotation.rocketPozition.z);
+}
+VOID Rocket::setScale() {
+	D3DXMatrixIdentity(&this->scale);
+	D3DXMatrixScaling(&this->scale, 0.1,0.1, 0.1);
 }
 VOID Rocket::cleanUpTexture() {
 
@@ -99,4 +116,10 @@ VOID Rocket::cleanUpTexture() {
 
 VOID Rocket::setDevice(Device& device) {
 	this->device = device;
+}
+
+VOID Rocket::pozition(int x,int y) {
+	D3DXMatrixIdentity(&this->transform);
+	D3DXMatrixTranslation(&this->transform, x, y, 0);
+	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);
 }

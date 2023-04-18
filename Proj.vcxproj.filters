@@ -33,6 +33,9 @@
     <ClCompile Include="KeywordEvents.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Pozition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Object\RocketMesh\RocketTexture.png">
@@ -56,6 +59,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeywordEvents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pozition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

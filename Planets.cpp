@@ -66,7 +66,7 @@ VOID Planets::loadMesh() {
 		}
 	}
 }
-VOID Planets::createRocket() {
+VOID Planets::createPlanet() {
 
 	for (DWORD i = 0; i < this->NumMaterials; i++)
 	{

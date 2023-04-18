@@ -31,6 +31,6 @@ HRESULT UserEvents::createInputDevice(HINSTANCE hInstance, HWND hWnd) {
 	this->g_pDinmouse->SetCooperativeLevel(hWnd, DISCL_EXCLUSIVE | DISCL_FOREGROUND);
 	return S_OK;
 }
-bool UserEvents::exit() {
-	return this->g_Keystate[DIK_ESCAPE] & 0x80;
+bool UserEvents::keyword(int key) {
+	return this->g_Keystate[key] & 0x80;
 }
