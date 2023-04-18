@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClCompile Include="Chapter 2.cpp" />
     <ClCompile Include="Device.cpp" />
+    <ClCompile Include="KeywordEvents.cpp" />
     <ClCompile Include="Planets.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -100,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Device.h" />
+    <ClInclude Include="KeywordEvents.h" />
     <ClInclude Include="Planets.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Window.h" />

@@ -1,16 +1,22 @@
 #include <Windows.h>
 #include <d3dx9.h>
-//#include <d3d9.h>
-//#include <d3dx9.h>
-//#include <d3dx9tex.h>
-//#include <dinput.h>
+#include <d3d9.h>
+#include <d3dx9.h>
+#include <d3dx9tex.h>
+#include <dinput.h>
 #include "Window.h"
 #include "Device.h"
 #include "Rocket.h"
 #include "Planets.h"
+#include "KeywordEvents.h"
+#pragma comment (lib, "d3d9.lib")
+#pragma comment (lib, "d3dx9.lib")
+#pragma comment (lib, "dinput8.lib")
+#pragma comment (lib, "dxguid.lib")
 Device myDevice;
 Rocket myRocket;
 Planets earth;
+UserEvents userEvents;
 HRESULT InitD3D(HWND hWnd)
 {
 	myDevice.createD3DObject(hWnd);
@@ -20,13 +26,23 @@ HRESULT InitD3D(HWND hWnd)
 	return S_OK;
 
 }
+VOID DetectInput();
+VOID Render();
 VOID Cleanup();
-
-//HRESULT InitDInput(HINSTANCE hInstance, HWND hWnd)
-//{
-//	
-//}
-
+VOID CleanDInput();
+HRESULT InitDInput(HINSTANCE hInstance, HWND hWnd)
+{
+	userEvents.createInputDevice(hInstance,hWnd);
+	return S_OK;
+}
+VOID CleanDInput()
+{
+	userEvents.unAcquire();
+}
+VOID DetectInput()
+{
+	userEvents.detectInput();
+}
 HRESULT InitGeometry()
 {
 	myRocket.loadMesh();
@@ -85,9 +101,7 @@ void SetupProjectionMatrix()
 VOID SetupMatrices()
 {
 	SetupWorldMatrix();
-
 	SetupViewMatrix();
-
 	SetupProjectionMatrix();
 }
 VOID SetupLights()
@@ -99,6 +113,19 @@ VOID Render()
 	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
+		D3DXMATRIX g_Transform;
+		D3DXMatrixIdentity(&g_Transform);
+		D3DXMatrixTranslation(&g_Transform,0, 0, 0);
+
+		D3DXMATRIX g_TransformrrOTATIO;
+		D3DXMatrixIdentity(&g_TransformrrOTATIO);
+		UINT iTime = timeGetTime() % 100000;
+		FLOAT fAngle = iTime * (2.0f * D3DX_PI) / 1000.0f;
+		D3DXMatrixRotationZ(&g_TransformrrOTATIO, fAngle);
+
+		g_Transform = g_TransformrrOTATIO * g_Transform;
+
+		myDevice.direct3Device9->SetTransform(D3DTS_WORLD, &g_Transform);
 		myRocket.createRocket();
 		earth.createRocket();
 		SetupMatrices();
@@ -124,12 +151,11 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 	myWindow.windowMaker(MsgProc);
 	if (SUCCEEDED(InitD3D(myWindow.hWnd)))
 	{
-
+		InitDInput(hInst, myWindow.hWnd);
 		ShowWindow(myWindow.hWnd, SW_SHOWDEFAULT);
 		UpdateWindow(myWindow.hWnd);
 		if (SUCCEEDED(InitGeometry()))
 		{
-
 			ShowWindow(myWindow.hWnd, SW_SHOWDEFAULT);
 			UpdateWindow(myWindow.hWnd);
 			MSG msg;
@@ -142,7 +168,11 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 					DispatchMessage(&msg);
 				}
 				else {
+					DetectInput();
 					Render();
+					if (userEvents.exit()) {
+						PostMessage(myWindow.hWnd, WM_DESTROY, 0, 0);
+					}
 				
 				}
 			}
