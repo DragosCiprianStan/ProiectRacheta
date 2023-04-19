@@ -9,7 +9,6 @@ HRESULT Rocket::setTexture() {
 			return E_FAIL;
 		}
 	}
-
 }
 HRESULT Rocket::setMesh() {
 
@@ -27,9 +26,7 @@ HRESULT Rocket::setMesh() {
 			return E_FAIL;
 		}
 	}
-
 }
-
 VOID Rocket::loadMesh() {
 	this->setTexture();
 	this->setMesh();
@@ -51,7 +48,6 @@ VOID Rocket::loadMesh() {
 				d3dxMaterials[i].pTextureFilename,
 				&this->MeshTextures[i])))
 			{
-
 				const TCHAR* strPrefix = TEXT("..\\");
 				const int lenPrefix = lstrlen(strPrefix);
 				TCHAR strTexture[MAX_PATH];
@@ -68,11 +64,13 @@ VOID Rocket::loadMesh() {
 	}
 }
 VOID Rocket::createRocket(Pozition translation, Pozition rotation) {
-
+	
 	this->setTranslation(translation);
 	this->setRotation(rotation);
-	//this->transform *= this->scale;
+	this->setScale();
+	this->transform *= this->scale;
 	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);
+	
 	for (DWORD i = 0; i < this->NumMaterials; i++)
 	{
 		this->device.direct3Device9->SetMaterial(&this->MeshMaterials[i]);
@@ -111,13 +109,10 @@ VOID Rocket::cleanUpTexture() {
 
 	if (this->texture != NULL)
 		this->texture->Release();
-
 }
-
 VOID Rocket::setDevice(Device& device) {
 	this->device = device;
 }
-
 VOID Rocket::pozition(int x,int y) {
 	D3DXMatrixIdentity(&this->transform);
 	D3DXMatrixTranslation(&this->transform, x, y, 0);

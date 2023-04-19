@@ -13,6 +13,8 @@ public:
 	D3DPRESENT_PARAMETERS d3dpp;
 	HRESULT createD3DObject(HWND hWnd);
 	VOID deviceStructure();
+	VOID cleanUpDevice();
+	VOID cleanUpDeviceObject();
 	HRESULT createDevice(HWND hWnd);
 };
 

@@ -18,7 +18,6 @@ private:
 	D3DXMATRIX transform;
 	D3DXMATRIX rotation;
 	D3DXMATRIX scale;
-
 	Device device;
 public:
 	VOID setDevice(Device& device);

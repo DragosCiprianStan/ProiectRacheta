@@ -5,6 +5,7 @@
 #include <d3dx9tex.h>
 #include <dinput.h>
 #include "Device.h"
+#include "Pozition.h"
 #pragma once
 class Planets
 {
@@ -15,12 +16,20 @@ public:
 	DWORD NumMaterials = 0L;
 	D3DMATERIAL9* MeshMaterials = NULL;
 	LPDIRECT3DTEXTURE9* MeshTextures = NULL;
+	D3DXMATRIX transform;
+	D3DXMATRIX rotation;
+	D3DXMATRIX scale;
 	Device device;
+
 	VOID setDevice(Device& device);
-	HRESULT setTexture();
-	HRESULT setMesh();
-	VOID loadMesh();
-	VOID createPlanet();
+	HRESULT setTexture(LPCSTR planetsTexture);
+	HRESULT setMesh(LPCSTR planetMesh);
+	VOID loadMesh(LPCSTR planetTexture, LPCSTR planetMesh);
+	VOID createPlanet(Pozition translation, Pozition rotation);
 	VOID cleanUpTexture();
+	VOID pathFile(D3DXMATERIAL* d3dxMaterials, DWORD i);
+	VOID setTranslation(Pozition translation);
+	VOID setRotation(Pozition rotation);
+	VOID setScale();
 };
 

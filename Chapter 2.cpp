@@ -18,8 +18,6 @@ Device myDevice;
 Rocket myRocket;
 Planets earth;
 UserEvents userEvents;
-
-
 Pozition poz;
 Pozition rot = { 1,1,1 };
 HRESULT InitD3D(HWND hWnd)
@@ -29,7 +27,6 @@ HRESULT InitD3D(HWND hWnd)
 	myRocket.setDevice(myDevice);
 	earth.setDevice(myDevice);
 	return S_OK;
-
 }
 VOID DetectInput();
 VOID Render();
@@ -51,22 +48,16 @@ VOID DetectInput()
 HRESULT InitGeometry()
 {
 	myRocket.loadMesh();
-	earth.loadMesh();
+	earth.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.x");
 	return S_OK;
 }
-
 VOID Cleanup()
 {
-
 	myRocket.cleanUpTexture();
 	earth.cleanUpTexture();
-	if (myDevice.direct3Device9 != NULL)
-		myDevice.direct3Device9->Release();
-
-	if (myDevice.directD3D != NULL)
-		myDevice.directD3D->Release();
+	myDevice.cleanUpDevice();
+	myDevice.cleanUpDeviceObject();
 }
-
 void SetupWorldMatrix()
 {
 	D3DXMATRIX g_Transform, m2;
@@ -109,18 +100,14 @@ VOID SetupMatrices()
 	SetupViewMatrix();
 	SetupProjectionMatrix();
 }
-VOID SetupLights()
-{
-	
-}
+VOID SetupLights(){}
 VOID Render()
 {
 	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
-
 		myRocket.createRocket(poz, rot);
-		earth.createPlanet();
+		earth.createPlanet(poz, rot);
 		SetupMatrices();
 		myDevice.direct3Device9->EndScene();
 	}
@@ -135,7 +122,6 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		PostQuitMessage(0);
 		return 0;
 	}
-
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)

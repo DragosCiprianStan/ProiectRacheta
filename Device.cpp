@@ -32,3 +32,11 @@ HRESULT Device::createDevice(HWND hWnd) {
 	this->direct3Device9->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	this->direct3Device9->SetRenderState(D3DRS_LIGHTING, FALSE);
 }
+VOID Device::cleanUpDevice() {
+	if (this->direct3Device9 != NULL)
+		this->direct3Device9->Release();
+}
+VOID Device::cleanUpDeviceObject() {
+	if (this->directD3D != NULL)
+		this->directD3D->Release();
+}
