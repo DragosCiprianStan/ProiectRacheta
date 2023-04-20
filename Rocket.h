@@ -24,7 +24,7 @@ public:
 	HRESULT setTexture();
 	HRESULT setMesh();
 	VOID loadMesh();
-	VOID createRocket(Pozition translation, Pozition rotation);
+	VOID createRocket(Pozition poz);
 	VOID cleanUpTexture();
 	VOID pozition(int x, int y);
 	VOID setTranslation(Pozition translation);

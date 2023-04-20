@@ -63,12 +63,12 @@ VOID Rocket::loadMesh() {
 		}
 	}
 }
-VOID Rocket::createRocket(Pozition translation, Pozition rotation) {
+VOID Rocket::createRocket(Pozition poz) {
 	
-	this->setTranslation(translation);
-	this->setRotation(rotation);
+	this->setTranslation(poz);
+	this->setRotation(poz);
 	this->setScale();
-	this->transform *= this->scale;
+	this->transform *= this->scale*this->rotation;
 	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);
 	
 	for (DWORD i = 0; i < this->NumMaterials; i++)
@@ -85,7 +85,7 @@ VOID Rocket::setTranslation(Pozition translation) {
 }
 VOID Rocket::setRotation(Pozition rotation) {
 	D3DXMatrixIdentity(&this->rotation);
-	D3DXMatrixTranslation(&this->rotation, rotation.rocketPozition.x, rotation.rocketPozition.y, rotation.rocketPozition.z);
+	D3DXMatrixRotationYawPitchRoll(&this->rotation, rotation.rocketPozition.rotX, rotation.rocketPozition.rotY, rotation.rocketPozition.rotZ);
 }
 VOID Rocket::setScale() {
 	D3DXMatrixIdentity(&this->scale);

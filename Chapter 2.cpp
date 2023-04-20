@@ -17,6 +17,7 @@
 Device myDevice;
 Rocket myRocket;
 Planets earth;
+Planets sun;
 UserEvents userEvents;
 Pozition poz;
 Pozition rot = { 1,1,1 };
@@ -26,6 +27,7 @@ HRESULT InitD3D(HWND hWnd)
 	myDevice.createDevice(hWnd);
 	myRocket.setDevice(myDevice);
 	earth.setDevice(myDevice);
+	sun.setDevice(myDevice);
 	return S_OK;
 }
 VOID DetectInput();
@@ -49,6 +51,7 @@ HRESULT InitGeometry()
 {
 	myRocket.loadMesh();
 	earth.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.x");
+	sun.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.x");
 	return S_OK;
 }
 VOID Cleanup()
@@ -103,11 +106,16 @@ VOID SetupMatrices()
 VOID SetupLights(){}
 VOID Render()
 {
+
 	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
-		myRocket.createRocket(poz, rot);
-		earth.createPlanet(poz, rot);
+		
+		sun.setLight(TRUE);
+		myRocket.createRocket(poz);
+		//earth.createPlanet(poz, rot);
+		sun.setLight(FALSE);
+		sun.createPlanet(poz, rot);
 		SetupMatrices();
 		myDevice.direct3Device9->EndScene();
 	}
@@ -155,10 +163,17 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 					if (userEvents.keyword(DIK_W)) {
 						poz.rocketPozition.x += 0;
 						poz.rocketPozition.y += 0.5;
+
 					}
 					if (userEvents.keyword(DIK_S)) {
 						poz.rocketPozition.x += 0;
 						poz.rocketPozition.y -= 0.5;
+					}
+					if (userEvents.keyword(DIK_D)) {
+						poz.rocketPozition.rotZ += 0.1;
+					}
+					if (userEvents.keyword(DIK_A)) {
+						poz.rocketPozition.rotZ -= 0.1;
 					}
 				}
 			}

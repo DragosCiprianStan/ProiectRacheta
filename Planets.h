@@ -20,7 +20,7 @@ public:
 	D3DXMATRIX rotation;
 	D3DXMATRIX scale;
 	Device device;
-
+	D3DMATERIAL9 mtrl;
 	VOID setDevice(Device& device);
 	HRESULT setTexture(LPCSTR planetsTexture);
 	HRESULT setMesh(LPCSTR planetMesh);
@@ -31,5 +31,7 @@ public:
 	VOID setTranslation(Pozition translation);
 	VOID setRotation(Pozition rotation);
 	VOID setScale();
+	VOID setLight(BOOL on_off);
+	VOID disableLight();
 };
 

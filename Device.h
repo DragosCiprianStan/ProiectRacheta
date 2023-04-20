@@ -15,6 +15,7 @@ public:
 	VOID deviceStructure();
 	VOID cleanUpDevice();
 	VOID cleanUpDeviceObject();
+	VOID SetupLights();
 	HRESULT createDevice(HWND hWnd);
 };
 

@@ -99,7 +99,8 @@ VOID Planets::setTranslation(Pozition translation) {
 }
 VOID Planets::setRotation(Pozition rotation) {
 	D3DXMatrixIdentity(&this->rotation);
-	D3DXMatrixTranslation(&this->rotation, rotation.earthPozition.x, rotation.earthPozition.y, rotation.earthPozition.z);
+
+	D3DXMatrixRotationX(&this->rotation, rotation.earthPozition.rotX);
 }
 VOID Planets::setScale() {
 	D3DXMatrixIdentity(&this->scale);
@@ -107,4 +108,19 @@ VOID Planets::setScale() {
 }
 VOID Planets::setDevice(Device& device) {
 	this->device = device;
+}
+VOID Planets::setLight(BOOL on_off) {
+
+	D3DLIGHT9 light;
+	ZeroMemory(&light, sizeof(light));
+	light.Type = D3DLIGHT_POINT;
+	light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	light.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	light.Range = 100.0f;
+	light.Attenuation0 = 1.0f;
+	light.Position = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	this->device.direct3Device9->SetLight(0, &light);
+	this->device.direct3Device9->LightEnable(0, on_off);
+	this->device.direct3Device9->SetRenderState(D3DRS_LIGHTING, on_off);
+	this->device.direct3Device9->SetRenderState(D3DRS_AMBIENT, 0);
 }

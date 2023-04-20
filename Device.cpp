@@ -31,6 +31,7 @@ HRESULT Device::createDevice(HWND hWnd) {
 	this->direct3Device9->SetRenderState(D3DRS_AMBIENT, 0xffffffff);
 	this->direct3Device9->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 	this->direct3Device9->SetRenderState(D3DRS_LIGHTING, FALSE);
+
 }
 VOID Device::cleanUpDevice() {
 	if (this->direct3Device9 != NULL)
@@ -39,4 +40,32 @@ VOID Device::cleanUpDevice() {
 VOID Device::cleanUpDeviceObject() {
 	if (this->directD3D != NULL)
 		this->directD3D->Release();
+}
+VOID Device::SetupLights() {
+
+	D3DMATERIAL9 mtrl;
+	ZeroMemory(&mtrl, sizeof(D3DMATERIAL9));
+	mtrl.Diffuse.r = mtrl.Ambient.r = 1.0f;
+	mtrl.Diffuse.g = mtrl.Ambient.g = 1.0f;
+	mtrl.Diffuse.b = mtrl.Ambient.b = 0.0f;
+	mtrl.Diffuse.a = mtrl.Ambient.a = 1.0f;
+	this->direct3Device9->SetMaterial(&mtrl);
+
+	D3DXVECTOR3 vecDir;
+	D3DLIGHT9 light;
+	ZeroMemory(&light, sizeof(D3DLIGHT9));
+	light.Type = D3DLIGHT_DIRECTIONAL;
+	light.Diffuse.r = 1.0f;
+	light.Diffuse.g = 1.0f;
+	light.Diffuse.b = 1.0f;
+
+	vecDir = D3DXVECTOR3(cosf(timeGetTime() / 350.0f),
+		1.0f,
+		sinf(timeGetTime() / 350.0f));
+	D3DXVec3Normalize((D3DXVECTOR3*)&light.Direction, &vecDir);
+	light.Range = 1000.0f;
+	this->direct3Device9->SetLight(0, &light);
+	this->direct3Device9->LightEnable(0, TRUE);
+	this->direct3Device9->SetRenderState(D3DRS_LIGHTING, TRUE);
+	this->direct3Device9->SetRenderState(D3DRS_AMBIENT, 0x00202020);
 }
