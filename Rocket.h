@@ -9,7 +9,7 @@
 class Rocket
 {
 private:
-	LPDIRECT3DTEXTURE9  texture=NULL; 
+	LPDIRECT3DTEXTURE9  texture = NULL;
 	LPD3DXBUFFER pD3DXMtrlBuffer = NULL;
 	LPD3DXMESH  Mesh = NULL;
 	DWORD NumMaterials = 0L;
@@ -30,6 +30,6 @@ public:
 	VOID setTranslation(Pozition translation);
 	VOID setRotation(Pozition rotation);
 	VOID setScale();
-	
+
 };
 

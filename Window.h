@@ -7,7 +7,7 @@
 class Window
 {
 public:
-	
+
 	WNDCLASSEX wc;
 	HWND hWnd;
 	VOID windowMaker(WNDPROC  MsgProc);

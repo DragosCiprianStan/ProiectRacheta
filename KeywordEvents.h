@@ -2,7 +2,7 @@
 #include <d3dx9.h>
 #include <d3dx9tex.h>
 #include <dinput.h>
-
+#include "Pozition.h"
 #pragma once
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
@@ -11,15 +11,16 @@
 class UserEvents
 {
 public:
-	BYTE					g_Keystate[256];				
+	BYTE					g_Keystate[256];
 	LPDIRECTINPUTDEVICE8	g_pDinKeyboard;
 	LPDIRECTINPUT8			g_pDin;
-	LPDIRECTINPUTDEVICE8	g_pDinmouse;					
+	LPDIRECTINPUTDEVICE8	g_pDinmouse;
 	DIMOUSESTATE			g_pMousestate;
 
 	VOID unAcquire();
 	VOID detectInput();
 	HRESULT createInputDevice(HINSTANCE hInstance, HWND hWnd);
 	bool keyword(int key);
+	VOID keyword2(int key,Pozition poz,int x,int y);
 };
 

@@ -36,7 +36,7 @@ VOID Cleanup();
 VOID CleanDInput();
 HRESULT InitDInput(HINSTANCE hInstance, HWND hWnd)
 {
-	userEvents.createInputDevice(hInstance,hWnd);
+	userEvents.createInputDevice(hInstance, hWnd);
 	return S_OK;
 }
 VOID CleanDInput()
@@ -103,14 +103,14 @@ VOID SetupMatrices()
 	SetupViewMatrix();
 	SetupProjectionMatrix();
 }
-VOID SetupLights(){}
+VOID SetupLights() {}
 VOID Render()
 {
 
-	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER,D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
+	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
-		
+
 		sun.setLight(TRUE);
 		myRocket.createRocket(poz);
 		//earth.createPlanet(poz, rot);
@@ -157,17 +157,19 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 				else {
 					DetectInput();
 					Render();
+
 					if (userEvents.keyword(DIK_ESCAPE)) {
 						PostMessage(myWindow.hWnd, WM_DESTROY, 0, 0);
 					}
 					if (userEvents.keyword(DIK_W)) {
 						poz.rocketPozition.x += 0;
-						poz.rocketPozition.y += 0.5;
+						poz.rocketPozition.y += 0.1;
 
 					}
+					//userEvents.keyword2(DIK_W, poz, 0, 0.5);
 					if (userEvents.keyword(DIK_S)) {
 						poz.rocketPozition.x += 0;
-						poz.rocketPozition.y -= 0.5;
+						poz.rocketPozition.y -= 0.1;
 					}
 					if (userEvents.keyword(DIK_D)) {
 						poz.rocketPozition.rotZ += 0.1;

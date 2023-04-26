@@ -30,7 +30,7 @@ HRESULT Rocket::setMesh() {
 VOID Rocket::loadMesh() {
 	this->setTexture();
 	this->setMesh();
-	
+
 	D3DXMATERIAL* d3dxMaterials = (D3DXMATERIAL*)this->pD3DXMtrlBuffer->GetBufferPointer();
 	this->MeshMaterials = new D3DMATERIAL9[NumMaterials];
 	this->MeshTextures = new LPDIRECT3DTEXTURE9[NumMaterials];
@@ -64,13 +64,13 @@ VOID Rocket::loadMesh() {
 	}
 }
 VOID Rocket::createRocket(Pozition poz) {
-	
+
 	this->setTranslation(poz);
 	this->setRotation(poz);
 	this->setScale();
-	this->transform *= this->scale*this->rotation;
-	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);
-	
+	this->rotation *= this->scale * this->transform;
+	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->rotation);
+
 	for (DWORD i = 0; i < this->NumMaterials; i++)
 	{
 		this->device.direct3Device9->SetMaterial(&this->MeshMaterials[i]);
@@ -86,10 +86,11 @@ VOID Rocket::setTranslation(Pozition translation) {
 VOID Rocket::setRotation(Pozition rotation) {
 	D3DXMatrixIdentity(&this->rotation);
 	D3DXMatrixRotationYawPitchRoll(&this->rotation, rotation.rocketPozition.rotX, rotation.rocketPozition.rotY, rotation.rocketPozition.rotZ);
+
 }
 VOID Rocket::setScale() {
 	D3DXMatrixIdentity(&this->scale);
-	D3DXMatrixScaling(&this->scale, 0.1,0.1, 0.1);
+	D3DXMatrixScaling(&this->scale, 0.1, 0.1, 0.1);
 }
 VOID Rocket::cleanUpTexture() {
 
@@ -113,7 +114,7 @@ VOID Rocket::cleanUpTexture() {
 VOID Rocket::setDevice(Device& device) {
 	this->device = device;
 }
-VOID Rocket::pozition(int x,int y) {
+VOID Rocket::pozition(int x, int y) {
 	D3DXMatrixIdentity(&this->transform);
 	D3DXMatrixTranslation(&this->transform, x, y, 0);
 	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);

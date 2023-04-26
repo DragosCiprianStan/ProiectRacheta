@@ -4,7 +4,7 @@
 HRESULT Planets::setTexture(LPCSTR planetTexture) {
 	if (FAILED(D3DXCreateTextureFromFile(this->device.direct3Device9, "earth.jpg", &this->texture)))
 	{
-		if (FAILED(D3DXCreateTextureFromFile(this->device.direct3Device9,planetTexture, &this->texture)))
+		if (FAILED(D3DXCreateTextureFromFile(this->device.direct3Device9, planetTexture, &this->texture)))
 		{
 			MessageBox(NULL, "Could not find bannana.", "Textures.exe", MB_OK);
 			return E_FAIL;
@@ -14,11 +14,11 @@ HRESULT Planets::setTexture(LPCSTR planetTexture) {
 }
 HRESULT Planets::setMesh(LPCSTR planetMesh) {
 
-	if (FAILED(D3DXLoadMeshFromX("earth.x", D3DXMESH_SYSTEMMEM,this->device.direct3Device9, NULL,&this->pD3DXMtrlBuffer,
+	if (FAILED(D3DXLoadMeshFromX("earth.x", D3DXMESH_SYSTEMMEM, this->device.direct3Device9, NULL, &this->pD3DXMtrlBuffer,
 		NULL, &this->NumMaterials,
 		&this->Mesh)))
 	{
-		if (FAILED(D3DXLoadMeshFromX(planetMesh, D3DXMESH_SYSTEMMEM,this->device.direct3Device9, NULL,
+		if (FAILED(D3DXLoadMeshFromX(planetMesh, D3DXMESH_SYSTEMMEM, this->device.direct3Device9, NULL,
 			&this->pD3DXMtrlBuffer, NULL, &this->NumMaterials,
 			&this->Mesh)))
 		{
@@ -51,12 +51,12 @@ VOID Planets::loadMesh(LPCSTR planetTexture, LPCSTR planetMesh) {
 		this->MeshMaterials[i] = d3dxMaterials[i].MatD3D;
 		this->MeshMaterials[i].Ambient = this->MeshMaterials[i].Diffuse;
 		this->MeshTextures[i] = NULL;
-		if (d3dxMaterials[i].pTextureFilename != NULL &&lstrlen(d3dxMaterials[i].pTextureFilename) > 0)
+		if (d3dxMaterials[i].pTextureFilename != NULL && lstrlen(d3dxMaterials[i].pTextureFilename) > 0)
 		{
-			if (FAILED(D3DXCreateTextureFromFile(this->device.direct3Device9,d3dxMaterials[i].pTextureFilename,&this->MeshTextures[i])))
+			if (FAILED(D3DXCreateTextureFromFile(this->device.direct3Device9, d3dxMaterials[i].pTextureFilename, &this->MeshTextures[i])))
 			{
 				this->pathFile(d3dxMaterials, i);
-				
+
 			}
 		}
 	}
@@ -104,7 +104,7 @@ VOID Planets::setRotation(Pozition rotation) {
 }
 VOID Planets::setScale() {
 	D3DXMatrixIdentity(&this->scale);
-	D3DXMatrixScaling(&this->scale,1, 1, 1);
+	D3DXMatrixScaling(&this->scale, 1, 1, 1);
 }
 VOID Planets::setDevice(Device& device) {
 	this->device = device;

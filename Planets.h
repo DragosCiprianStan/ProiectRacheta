@@ -32,6 +32,6 @@ public:
 	VOID setRotation(Pozition rotation);
 	VOID setScale();
 	VOID setLight(BOOL on_off);
-	VOID disableLight();
+
 };
 

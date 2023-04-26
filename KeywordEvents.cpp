@@ -1,7 +1,7 @@
 #include "KeywordEvents.h"
 
 VOID UserEvents::unAcquire() {
-	this->g_pDinKeyboard->Unacquire();    
+	this->g_pDinKeyboard->Unacquire();
 	this->g_pDinmouse->Unacquire();
 	this->g_pDin->Release();
 }
@@ -14,17 +14,17 @@ VOID UserEvents::detectInput() {
 
 }
 HRESULT UserEvents::createInputDevice(HINSTANCE hInstance, HWND hWnd) {
-	DirectInput8Create(hInstance,    
-		DIRECTINPUT_VERSION,   
-		IID_IDirectInput8,    
-		(void**)&this->g_pDin,    
-		NULL);    
+	DirectInput8Create(hInstance,
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8,
+		(void**)&this->g_pDin,
+		NULL);
 	this->g_pDin->CreateDevice(GUID_SysKeyboard,
 		&this->g_pDinKeyboard,
-		NULL);   
+		NULL);
 	this->g_pDin->CreateDevice(GUID_SysMouse,
 		&this->g_pDinmouse,
-		NULL); 
+		NULL);
 	this->g_pDinKeyboard->SetDataFormat(&c_dfDIKeyboard);
 	this->g_pDinmouse->SetDataFormat(&c_dfDIMouse);
 	this->g_pDinKeyboard->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
@@ -33,4 +33,10 @@ HRESULT UserEvents::createInputDevice(HINSTANCE hInstance, HWND hWnd) {
 }
 bool UserEvents::keyword(int key) {
 	return this->g_Keystate[key] & 0x80;
+}
+VOID UserEvents::keyword2(int key, Pozition poz, int x, int y) {
+	if (this->g_Keystate[key] & 0x80) {
+		poz.rocketPozition.x += x;
+		poz.rocketPozition.y += y;
+	}
 }
