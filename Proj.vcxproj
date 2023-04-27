@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Chapter 2.cpp" />
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="KeywordEvents.cpp" />
@@ -101,6 +102,7 @@
     <Image Include="Object\RocketMesh\RocketTexture.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Device.h" />
     <ClInclude Include="KeywordEvents.h" />
     <ClInclude Include="Planets.h" />

@@ -3,6 +3,7 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <d3dx9tex.h>
+
 #include <dinput.h>
 #include "Window.h"
 #include "Device.h"
@@ -10,6 +11,7 @@
 #include "Planets.h"
 #include "KeywordEvents.h"
 #include "Pozition.h"
+#include "Camera.h"
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
 #pragma comment (lib, "dinput8.lib")
@@ -21,6 +23,8 @@ Planets sun;
 UserEvents userEvents;
 Pozition poz;
 Pozition rot = { 1,1,1 };
+CXCamera *myCamera;
+
 HRESULT InitD3D(HWND hWnd)
 {
 	myDevice.createD3DObject(hWnd);
@@ -29,6 +33,15 @@ HRESULT InitD3D(HWND hWnd)
 	earth.setDevice(myDevice);
 	sun.setDevice(myDevice);
 	return S_OK;
+}
+void InitiateCamera()
+{
+	myCamera = new CXCamera(myDevice.direct3Device9);
+	D3DXVECTOR3 vEyePt(0.0f, 0.0f, -5.0f);
+	D3DXVECTOR3 vLookatPt(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);
+	D3DXMATRIXA16 matView;
+	myCamera->LookAtPos(&vEyePt, &vLookatPt, &vUpVec);
 }
 VOID DetectInput();
 VOID Render();
@@ -52,6 +65,7 @@ HRESULT InitGeometry()
 	myRocket.loadMesh();
 	earth.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.x");
 	sun.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.x");
+	InitiateCamera();
 	return S_OK;
 }
 VOID Cleanup()
@@ -63,33 +77,17 @@ VOID Cleanup()
 }
 void SetupWorldMatrix()
 {
-	D3DXMATRIX g_Transform, m2;
-	D3DXMatrixIdentity(&g_Transform);
-	D3DXMatrixIdentity(&m2);
-	D3DXMatrixScaling(&m2, 1.3, 1.3, 1.3);
-	D3DXMatrixRotationY(&g_Transform, timeGetTime() / 1000.0);
-	g_Transform *= m2;
-	myDevice.direct3Device9->SetTransform(D3DTS_WORLD, &g_Transform);
+
+	D3DXMATRIXA16 matWorld;
+	D3DXMatrixRotationY(&matWorld, timeGetTime() / 1000.0f);
+	myDevice.direct3Device9->SetTransform(D3DTS_WORLD, &matWorld);
+
+
 }
 
-void SetupWorldMatrixCerc()
-{
-	D3DXMATRIX g_Transform, m2;
-	D3DXMatrixIdentity(&g_Transform);
-	D3DXMatrixIdentity(&m2);
-	D3DXMatrixTranslation(&m2, 1.3, 1.3, 1.3);
-	D3DXMatrixRotationY(&g_Transform, timeGetTime() / 1000.0);
-	g_Transform *= m2;
-	myDevice.direct3Device9->SetTransform(D3DTS_WORLD, &g_Transform);
-}
 void SetupViewMatrix()
 {
-	D3DXVECTOR3 vEyePt(0.0f, 3.0f, -5.0f);
-	D3DXVECTOR3 vLookatPt(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);
-	D3DXMATRIXA16 matView;
-	D3DXMatrixLookAtLH(&matView, &vEyePt, &vLookatPt, &vUpVec);
-	myDevice.direct3Device9->SetTransform(D3DTS_VIEW, &matView);
+	myCamera->Update();
 }
 void SetupProjectionMatrix()
 {
@@ -177,6 +175,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 					if (userEvents.keyword(DIK_A)) {
 						poz.rocketPozition.rotZ -= 0.1;
 					}
+					
 				}
 			}
 		}
