@@ -30,6 +30,8 @@ public:
 	VOID setTranslation(Pozition translation);
 	VOID setRotation(Pozition rotation);
 	VOID setScale();
+	VOID setRotationY(FLOAT y);
+	VOID setLight(BOOL on_off, Pozition meshPosition);
 
 };
 

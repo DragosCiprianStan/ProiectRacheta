@@ -7,7 +7,7 @@ CXCamera::CXCamera(LPDIRECT3DDEVICE9 pDevice)
 	m_Right = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 	m_Up = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_UpdateRequired = false;
-
+	
 	m_fRotAboutUp = m_fRotAboutRight = m_fRotAboutFacing = 0.0f;
 	D3DXMatrixIdentity(&m_ViewTransform);
 
@@ -94,10 +94,14 @@ void CXCamera::SetPosition(FLOAT X, FLOAT Y, FLOAT Z)
 	m_Position = D3DXVECTOR3(X, Y, Z);
 	m_UpdateRequired = true;
 }
-
+//void CXCamera::SetRotation(float fAngle)
+//{
+//	m_fRotAboutRight = fAngle;
+//	m_UpdateRequired = true;
+//}
 void CXCamera::RotateDown(float fAngle)
 {
-	m_fRotAboutRight += fAngle;
+	m_fRotAboutRight = fAngle;
 	m_UpdateRequired = true;
 }
 

@@ -22,7 +22,7 @@ HRESULT Rocket::setMesh() {
 			&this->pD3DXMtrlBuffer, NULL, &this->NumMaterials,
 			&this->Mesh)))
 		{
-			MessageBox(NULL, "Could not find tiger.x", "Meshes.exe", MB_OK);
+			MessageBox(NULL, "Could not find Rocket.x", "Meshes.exe", MB_OK);
 			return E_FAIL;
 		}
 	}
@@ -86,11 +86,16 @@ VOID Rocket::setTranslation(Pozition translation) {
 VOID Rocket::setRotation(Pozition rotation) {
 	D3DXMatrixIdentity(&this->rotation);
 	D3DXMatrixRotationYawPitchRoll(&this->rotation, rotation.rocketPozition.rotX, rotation.rocketPozition.rotY, rotation.rocketPozition.rotZ);
+	
+}
+VOID Rocket::setRotationY(FLOAT y) {
+	D3DXMatrixIdentity(&this->rotation);
+	D3DXMatrixRotationY(&this->rotation, y);
 
 }
 VOID Rocket::setScale() {
 	D3DXMatrixIdentity(&this->scale);
-	D3DXMatrixScaling(&this->scale, 0.1, 0.1, 0.1);
+	D3DXMatrixScaling(&this->scale, 0.3, 0.3, 0.3);
 }
 VOID Rocket::cleanUpTexture() {
 
@@ -118,4 +123,18 @@ VOID Rocket::pozition(int x, int y) {
 	D3DXMatrixIdentity(&this->transform);
 	D3DXMatrixTranslation(&this->transform, x, y, 0);
 	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);
+}
+VOID Rocket::setLight(BOOL on_off, Pozition meshPosition) {
+	D3DLIGHT9 light;
+	ZeroMemory(&light, sizeof(light));
+	light.Type = D3DLIGHT_POINT;
+	light.Diffuse = D3DXCOLOR(0.25f, 0.25f, 1.0f, 0.0f);
+	light.Specular = D3DXCOLOR(0.5f, 0.5f, 1.0f, 1.0f);
+	light.Range = 10.0f;
+	light.Attenuation0 = 1.0f;
+	light.Position = D3DXVECTOR3(meshPosition.rocketPozition.x, meshPosition.rocketPozition.y, meshPosition.rocketPozition.z+0.5);
+	this->device.direct3Device9->SetLight(0, &light);
+	this->device.direct3Device9->LightEnable(0, on_off);
+	this->device.direct3Device9->SetRenderState(D3DRS_LIGHTING, on_off);
+	this->device.direct3Device9->SetRenderState(D3DRS_AMBIENT, 0);
 }

@@ -19,13 +19,15 @@ public:
 	D3DXMATRIX transform;
 	D3DXMATRIX rotation;
 	D3DXMATRIX scale;
+	Pozition meshPosition;
 	Device device;
 	D3DMATERIAL9 mtrl;
 	VOID setDevice(Device& device);
+
 	HRESULT setTexture(LPCSTR planetsTexture);
 	HRESULT setMesh(LPCSTR planetMesh);
 	VOID loadMesh(LPCSTR planetTexture, LPCSTR planetMesh);
-	VOID createPlanet(Pozition translation, Pozition rotation);
+	VOID createPlanet(Pozition translation);
 	VOID cleanUpTexture();
 	VOID pathFile(D3DXMATERIAL* d3dxMaterials, DWORD i);
 	VOID setTranslation(Pozition translation);

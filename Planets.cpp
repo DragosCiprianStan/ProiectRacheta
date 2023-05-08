@@ -61,9 +61,9 @@ VOID Planets::loadMesh(LPCSTR planetTexture, LPCSTR planetMesh) {
 		}
 	}
 }
-VOID Planets::createPlanet(Pozition translation, Pozition rotation) {
+VOID Planets::createPlanet(Pozition translation) {
 	this->setTranslation(translation);
-	this->setRotation(rotation);
+	
 	this->setScale();
 	this->transform *= this->scale;
 	this->device.direct3Device9->SetTransform(D3DTS_WORLD, &this->transform);
@@ -93,9 +93,9 @@ VOID Planets::cleanUpTexture() {
 		this->texture->Release();
 }
 VOID Planets::setTranslation(Pozition translation) {
-
+	this->meshPosition = translation;
 	D3DXMatrixIdentity(&this->transform);
-	D3DXMatrixTranslation(&this->transform, translation.earthPozition.x, translation.earthPozition.y, translation.earthPozition.z);
+	D3DXMatrixTranslation(&this->transform,0, 0, translation.earthPozition.z);
 }
 VOID Planets::setRotation(Pozition rotation) {
 	D3DXMatrixIdentity(&this->rotation);
@@ -104,23 +104,23 @@ VOID Planets::setRotation(Pozition rotation) {
 }
 VOID Planets::setScale() {
 	D3DXMatrixIdentity(&this->scale);
-	D3DXMatrixScaling(&this->scale, 1, 1, 1);
+	D3DXMatrixScaling(&this->scale, 10, 10, 10);
 }
 VOID Planets::setDevice(Device& device) {
 	this->device = device;
 }
-VOID Planets::setLight(BOOL on_off) {
 
+VOID Planets::setLight(BOOL on_off) {
 	D3DLIGHT9 light;
 	ZeroMemory(&light, sizeof(light));
 	light.Type = D3DLIGHT_POINT;
 	light.Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	light.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	light.Range = 100.0f;
-	light.Attenuation0 = 1.0f;
-	light.Position = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	light.Range = 1000.0f;
+	light.Attenuation0 = 0.0f;
+	light.Position = D3DXVECTOR3(this->meshPosition.earthPozition.x, this->meshPosition.earthPozition.y,this->meshPosition.earthPozition.z);
 	this->device.direct3Device9->SetLight(0, &light);
 	this->device.direct3Device9->LightEnable(0, on_off);
 	this->device.direct3Device9->SetRenderState(D3DRS_LIGHTING, on_off);
-	this->device.direct3Device9->SetRenderState(D3DRS_AMBIENT, 0);
+	this->device.direct3Device9->SetRenderState(D3DRS_AMBIENT, 10);
 }

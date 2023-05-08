@@ -3,7 +3,6 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <d3dx9tex.h>
-
 #include <dinput.h>
 #include "Window.h"
 #include "Device.h"
@@ -12,17 +11,22 @@
 #include "KeywordEvents.h"
 #include "Pozition.h"
 #include "Camera.h"
+#include "UserAudio.h"
+#include <stdio.h>
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
 #pragma comment (lib, "dinput8.lib")
 #pragma comment (lib, "dxguid.lib")
+
+
 Device myDevice;
 Rocket myRocket;
 Planets earth;
+UserAudio userAudio;
 Planets sun;
 UserEvents userEvents;
 Pozition poz;
-Pozition rot = { 1,1,1 };
+
 CXCamera *myCamera;
 
 HRESULT InitD3D(HWND hWnd)
@@ -41,7 +45,12 @@ void InitiateCamera()
 	D3DXVECTOR3 vLookatPt(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vUpVec(0.0f, 1.0f, 0.0f);
 	D3DXMATRIXA16 matView;
+
 	myCamera->LookAtPos(&vEyePt, &vLookatPt, &vUpVec);
+	myCamera->MoveForward(4);
+	myCamera->MoveUp(1.8);
+	myCamera->MoveRight(0.1);
+	myCamera->RotateDown(0.7);
 }
 VOID DetectInput();
 VOID Render();
@@ -62,10 +71,12 @@ VOID DetectInput()
 }
 HRESULT InitGeometry()
 {
+	poz.rocketPozition.rotY += 1.57079633;
 	myRocket.loadMesh();
 	earth.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.x");
 	sun.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.x");
 	InitiateCamera();
+	
 	return S_OK;
 }
 VOID Cleanup()
@@ -81,12 +92,13 @@ void SetupWorldMatrix()
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixRotationY(&matWorld, timeGetTime() / 1000.0f);
 	myDevice.direct3Device9->SetTransform(D3DTS_WORLD, &matWorld);
-
+	
 
 }
 
 void SetupViewMatrix()
 {
+	
 	myCamera->Update();
 }
 void SetupProjectionMatrix()
@@ -94,6 +106,7 @@ void SetupProjectionMatrix()
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
 	myDevice.direct3Device9->SetTransform(D3DTS_PROJECTION, &matProj);
+	
 }
 VOID SetupMatrices()
 {
@@ -104,19 +117,23 @@ VOID SetupMatrices()
 VOID SetupLights() {}
 VOID Render()
 {
-
+	
 	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
-
-		sun.setLight(TRUE);
+		//sun.setLight(TRUE);
+		poz.earthPozition.z = 10;
+		
 		myRocket.createRocket(poz);
-		//earth.createPlanet(poz, rot);
-		sun.setLight(FALSE);
-		sun.createPlanet(poz, rot);
+		myRocket.setLight(FALSE, poz);
+		//sun.setLight(FALSE);
+		earth.createPlanet(poz);
+		//poz.earthPozition.z = -10;
+		//sun.createPlanet(poz);
 		SetupMatrices();
 		myDevice.direct3Device9->EndScene();
 	}
+	
 	myDevice.direct3Device9->Present(NULL, NULL, NULL, NULL);
 }
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -130,6 +147,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 {
 	Window myWindow;
@@ -141,6 +159,9 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 		UpdateWindow(myWindow.hWnd);
 		if (SUCCEEDED(InitGeometry()))
 		{
+			if (FAILED(userAudio.InitDirectShow(myWindow.hWnd)))
+				return 0;
+
 			ShowWindow(myWindow.hWnd, SW_SHOWDEFAULT);
 			UpdateWindow(myWindow.hWnd);
 			MSG msg;
@@ -155,26 +176,50 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 				else {
 					DetectInput();
 					Render();
-
+					
 					if (userEvents.keyword(DIK_ESCAPE)) {
 						PostMessage(myWindow.hWnd, WM_DESTROY, 0, 0);
 					}
 					if (userEvents.keyword(DIK_W)) {
-						poz.rocketPozition.x += 0;
-						poz.rocketPozition.y += 0.1;
+						userAudio.play();
+						myRocket.setLight(TRUE, poz);
+						poz.rocketPozition.z += 0.1;
 
+						poz.rocketPozition.x += 0.1 * (sin(poz.rocketPozition.rotZ)*(- cos(poz.rocketPozition.rotZ)));
+
+						myCamera->MoveForward(0.1);
+					}
+					else {
+						userAudio.stop();
 					}
 					//userEvents.keyword2(DIK_W, poz, 0, 0.5);
 					if (userEvents.keyword(DIK_S)) {
-						poz.rocketPozition.x += 0;
-						poz.rocketPozition.y -= 0.1;
+						poz.rocketPozition.z -= 0.1;
+						myCamera->MoveForward(-0.1);
 					}
 					if (userEvents.keyword(DIK_D)) {
+						poz.rocketPozition.rotZ -= 0.1;
+						
+					}
+					
+					if (userEvents.keyword(DIK_A)) {
+				
 						poz.rocketPozition.rotZ += 0.1;
 					}
-					if (userEvents.keyword(DIK_A)) {
-						poz.rocketPozition.rotZ -= 0.1;
+					if (userEvents.keyword(DIK_UP)) {
+						myCamera->MoveForward(0.1);
 					}
+					if (userEvents.keyword(DIK_DOWN)) {
+						myCamera->MoveForward(-0.1);
+					}
+					if (userEvents.keyword(DIK_RIGHT)) {
+						myCamera->MoveRight(0.1);
+					}
+					if (userEvents.keyword(DIK_LEFT)) {
+						myCamera->MoveRight(-0.1);
+					}
+					myCamera->RotateRight((userEvents.g_pMousestate.lX * (D3DX_PI / 180)));
+					myCamera->RotateDown(userEvents.g_pMousestate.lY * (D3DX_PI / 180));
 					
 				}
 			}
