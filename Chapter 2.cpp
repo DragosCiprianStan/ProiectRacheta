@@ -26,7 +26,7 @@ UserAudio userAudio;
 Planets sun;
 UserEvents userEvents;
 Pozition poz;
-
+Planets skybox;
 CXCamera *myCamera;
 
 HRESULT InitD3D(HWND hWnd)
@@ -36,6 +36,7 @@ HRESULT InitD3D(HWND hWnd)
 	myRocket.setDevice(myDevice);
 	earth.setDevice(myDevice);
 	sun.setDevice(myDevice);
+	skybox.setDevice(myDevice);
 	return S_OK;
 }
 void InitiateCamera()
@@ -69,14 +70,17 @@ VOID DetectInput()
 {
 	userEvents.detectInput();
 }
+LPDIRECT3DTEXTURE9      g_pTexture = NULL; // Our texture
 HRESULT InitGeometry()
 {
 	poz.rocketPozition.rotY += 1.57079633;
 	myRocket.loadMesh();
 	earth.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.x");
 	sun.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.x");
+	skybox.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\skybox.png", "E:\\Facultate\\DirectX\\Proiect\\Object\\Cube.x");
 	InitiateCamera();
-	
+
+
 	return S_OK;
 }
 VOID Cleanup()
@@ -115,22 +119,28 @@ VOID SetupMatrices()
 	SetupProjectionMatrix();
 }
 VOID SetupLights() {}
+
 VOID Render()
 {
-	
+
 	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
+		skybox.createPlanet(poz);
+
 		//sun.setLight(TRUE);
 		poz.earthPozition.z = 10;
 		
 		myRocket.createRocket(poz);
-		myRocket.setLight(FALSE, poz);
-		//sun.setLight(FALSE);
+		myRocket.setLight(FALSE, poz);	
 		earth.createPlanet(poz);
-		//poz.earthPozition.z = -10;
-		//sun.createPlanet(poz);
+		poz.earthPozition.z = -10;
+
+		sun.createPlanet(poz);
+		//sun.setLight(FALSE);
 		SetupMatrices();
+		
+
 		myDevice.direct3Device9->EndScene();
 	}
 	

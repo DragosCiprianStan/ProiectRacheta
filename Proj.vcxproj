@@ -95,6 +95,7 @@
     <ClCompile Include="Planets.cpp" />
     <ClCompile Include="Pozition.cpp" />
     <ClCompile Include="Rocket.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
     <ClCompile Include="UserAudio.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -109,6 +110,7 @@
     <ClInclude Include="Planets.h" />
     <ClInclude Include="Pozition.h" />
     <ClInclude Include="Rocket.h" />
+    <ClInclude Include="SkyBox.h" />
     <ClInclude Include="UserAudio.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

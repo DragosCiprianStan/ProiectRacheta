@@ -130,7 +130,7 @@ VOID Rocket::setLight(BOOL on_off, Pozition meshPosition) {
 	light.Type = D3DLIGHT_POINT;
 	light.Diffuse = D3DXCOLOR(0.25f, 0.25f, 1.0f, 0.0f);
 	light.Specular = D3DXCOLOR(0.5f, 0.5f, 1.0f, 1.0f);
-	light.Range = 10.0f;
+	light.Range = 1.0f;
 	light.Attenuation0 = 1.0f;
 	light.Position = D3DXVECTOR3(meshPosition.rocketPozition.x, meshPosition.rocketPozition.y, meshPosition.rocketPozition.z+0.5);
 	this->device.direct3Device9->SetLight(0, &light);

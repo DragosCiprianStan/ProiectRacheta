@@ -118,9 +118,9 @@ VOID Planets::setLight(BOOL on_off) {
 	light.Specular = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	light.Range = 1000.0f;
 	light.Attenuation0 = 0.0f;
-	light.Position = D3DXVECTOR3(this->meshPosition.earthPozition.x, this->meshPosition.earthPozition.y,this->meshPosition.earthPozition.z);
+	light.Position = D3DXVECTOR3(this->meshPosition.earthPozition.x, this->meshPosition.earthPozition.y, -this->meshPosition.earthPozition.z);
 	this->device.direct3Device9->SetLight(0, &light);
 	this->device.direct3Device9->LightEnable(0, on_off);
 	this->device.direct3Device9->SetRenderState(D3DRS_LIGHTING, on_off);
-	this->device.direct3Device9->SetRenderState(D3DRS_AMBIENT, 10);
+	this->device.direct3Device9->SetRenderState(D3DRS_AMBIENT, 0);
 }
