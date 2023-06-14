@@ -94,11 +94,7 @@ void CXCamera::SetPosition(FLOAT X, FLOAT Y, FLOAT Z)
 	m_Position = D3DXVECTOR3(X, Y, Z);
 	m_UpdateRequired = true;
 }
-//void CXCamera::SetRotation(float fAngle)
-//{
-//	m_fRotAboutRight = fAngle;
-//	m_UpdateRequired = true;
-//}
+
 void CXCamera::RotateDown(float fAngle)
 {
 	m_fRotAboutRight = fAngle;

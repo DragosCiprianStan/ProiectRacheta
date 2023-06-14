@@ -1,6 +1,5 @@
 #include "Planets.h"
-//"E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.jpg"
-//"E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.x"
+
 HRESULT Planets::setTexture(LPCSTR planetTexture) {
 	if (FAILED(D3DXCreateTextureFromFile(this->device.direct3Device9, "earth.jpg", &this->texture)))
 	{

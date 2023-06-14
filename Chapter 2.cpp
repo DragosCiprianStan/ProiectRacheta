@@ -27,7 +27,7 @@ Planets sun;
 UserEvents userEvents;
 Pozition poz;
 SkyBox skybox;
-CXCamera *myCamera;
+CXCamera* myCamera;
 
 HRESULT InitD3D(HWND hWnd)
 {
@@ -70,7 +70,7 @@ VOID DetectInput()
 {
 	userEvents.detectInput();
 }
-LPDIRECT3DTEXTURE9      g_pTexture = NULL; // Our texture
+LPDIRECT3DTEXTURE9      g_pTexture = NULL;
 HRESULT InitGeometry()
 {
 	poz.rocketPozition.rotY += 1.57079633;
@@ -96,13 +96,13 @@ void SetupWorldMatrix()
 	D3DXMATRIXA16 matWorld;
 	D3DXMatrixRotationY(&matWorld, timeGetTime() / 1000.0f);
 	myDevice.direct3Device9->SetTransform(D3DTS_WORLD, &matWorld);
-	
+
 
 }
 
 void SetupViewMatrix()
 {
-	
+
 	myCamera->Update();
 }
 void SetupProjectionMatrix()
@@ -110,7 +110,7 @@ void SetupProjectionMatrix()
 	D3DXMATRIXA16 matProj;
 	D3DXMatrixPerspectiveFovLH(&matProj, D3DX_PI / 4, 1.0f, 1.0f, 100.0f);
 	myDevice.direct3Device9->SetTransform(D3DTS_PROJECTION, &matProj);
-	
+
 }
 VOID SetupMatrices()
 {
@@ -129,20 +129,19 @@ VOID Render()
 
 		skybox.createSkybox();
 		poz.earthPozition.z = 4;
-		
+
 		myRocket.createRocket(poz);
-		myRocket.setLight(FALSE, poz);	
 		earth.createPlanet(poz);
 		poz.earthPozition.z = -4;
 
 		sun.createPlanet(poz);
-		//sun.setLight(FALSE);
+
 		SetupMatrices();
-	
+
 		skybox.createSkybox();
 		myDevice.direct3Device9->EndScene();
 	}
-	
+
 	myDevice.direct3Device9->Present(NULL, NULL, NULL, NULL);
 }
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -156,7 +155,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
-
+bool isUp = false;
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 {
 	Window myWindow;
@@ -185,34 +184,46 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 				else {
 					DetectInput();
 					Render();
-					
+
 					if (userEvents.keyword(DIK_ESCAPE)) {
 						PostMessage(myWindow.hWnd, WM_DESTROY, 0, 0);
 					}
 					if (userEvents.keyword(DIK_W)) {
 						userAudio.play();
-						myRocket.setLight(TRUE, poz);
+
 						poz.rocketPozition.z += 0.1;
 
-						poz.rocketPozition.x += 0.1 * (sin(poz.rocketPozition.rotZ)*(- cos(poz.rocketPozition.rotZ)));
+						poz.rocketPozition.x += 0.1 * (sin(poz.rocketPozition.rotZ) * (-cos(poz.rocketPozition.rotZ)));
+
+						poz.rocketPozition.y -= 0.1 * (sin(poz.rocketPozition.rotY) * (-cos(poz.rocketPozition.rotY)));
+
+
 
 						myCamera->MoveForward(0.1);
 					}
 					else {
 						userAudio.stop();
 					}
-					//userEvents.keyword2(DIK_W, poz, 0, 0.5);
 					if (userEvents.keyword(DIK_S)) {
 						poz.rocketPozition.z -= 0.1;
 						myCamera->MoveForward(-0.1);
 					}
 					if (userEvents.keyword(DIK_D)) {
 						poz.rocketPozition.rotZ -= 0.1;
-						
+
 					}
-					
+					if (userEvents.keyword(DIK_Z)) {
+						poz.rocketPozition.y += 0.1;
+						poz.rocketPozition.rotY += 0.1;
+
+
+					}if (userEvents.keyword(DIK_X)) {
+						poz.rocketPozition.y -= 0.1;
+						poz.rocketPozition.rotY -= 0.1;
+
+					}
 					if (userEvents.keyword(DIK_A)) {
-				
+
 						poz.rocketPozition.rotZ += 0.1;
 					}
 					if (userEvents.keyword(DIK_UP)) {
@@ -229,7 +240,7 @@ INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 					}
 					myCamera->RotateRight((userEvents.g_pMousestate.lX * (D3DX_PI / 180)));
 					myCamera->RotateDown(userEvents.g_pMousestate.lY * (D3DX_PI / 180));
-					
+
 				}
 			}
 		}

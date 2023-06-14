@@ -34,12 +34,12 @@ HRESULT SkyBox::loadTexture(LPCSTR nameTexture, LPCSTR nameTexture2, LPDIRECT3DT
 
 HRESULT SkyBox::loadSkybox()
 {
-	loadTexture("2_front.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\2_front.jpg", skyboxTextures[0]);
+	loadTexture("6_back.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\6_back.jpg", skyboxTextures[0]);
 	loadTexture("1_left.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\1_left.jpg", skyboxTextures[1]);
 	loadTexture("5_reight.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\5_reight.jpg", this->skyboxTextures[2]);
 	loadTexture("3_top.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\3_top.jpg", this->skyboxTextures[3]);
 	loadTexture("4_bottom.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\4_bottom.jpg", this->skyboxTextures[4]);
-	loadTexture("6_back.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\6_back.jpg", this->skyboxTextures[5]);
+	loadTexture("2_front.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\SkyBoxImage\\2_front.jpg", this->skyboxTextures[5]);
 	CUSTOMVERTEX skybox[24] = {
 
 
