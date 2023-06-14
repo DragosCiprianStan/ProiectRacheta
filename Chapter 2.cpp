@@ -1,7 +1,6 @@
 #include <Windows.h>
 #include <d3dx9.h>
 #include <d3d9.h>
-#include <d3dx9.h>
 #include <d3dx9tex.h>
 #include <dinput.h>
 #include "Window.h"
@@ -13,6 +12,7 @@
 #include "Camera.h"
 #include "UserAudio.h"
 #include <stdio.h>
+#include "SkyBox.h"
 #pragma comment (lib, "d3d9.lib")
 #pragma comment (lib, "d3dx9.lib")
 #pragma comment (lib, "dinput8.lib")
@@ -26,7 +26,7 @@ UserAudio userAudio;
 Planets sun;
 UserEvents userEvents;
 Pozition poz;
-Planets skybox;
+SkyBox skybox;
 CXCamera *myCamera;
 
 HRESULT InitD3D(HWND hWnd)
@@ -77,7 +77,7 @@ HRESULT InitGeometry()
 	myRocket.loadMesh();
 	earth.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Earth\\earth.x");
 	sun.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.jpg", "E:\\Facultate\\DirectX\\Proiect\\Object\\Planets\\Sun\\Sun.x");
-	skybox.loadMesh("E:\\Facultate\\DirectX\\Proiect\\Object\\skybox.png", "E:\\Facultate\\DirectX\\Proiect\\Object\\Cube.x");
+	skybox.loadSkybox();
 	InitiateCamera();
 
 
@@ -126,21 +126,20 @@ VOID Render()
 	myDevice.direct3Device9->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 255, 255), 1.0f, 0);
 	if (SUCCEEDED(myDevice.direct3Device9->BeginScene()))
 	{
-		skybox.createPlanet(poz);
 
-		//sun.setLight(TRUE);
-		poz.earthPozition.z = 10;
+		skybox.createSkybox();
+		poz.earthPozition.z = 4;
 		
 		myRocket.createRocket(poz);
 		myRocket.setLight(FALSE, poz);	
 		earth.createPlanet(poz);
-		poz.earthPozition.z = -10;
+		poz.earthPozition.z = -4;
 
 		sun.createPlanet(poz);
 		//sun.setLight(FALSE);
 		SetupMatrices();
-		
-
+	
+		skybox.createSkybox();
 		myDevice.direct3Device9->EndScene();
 	}
 	
